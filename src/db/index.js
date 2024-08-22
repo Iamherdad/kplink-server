@@ -15,7 +15,6 @@ const dbConfig = {
 const db = new Database(dbConfig);
 
 const createTables = async (tabs) => {
-  console.log(tabs);
   for (let i = 0; i < tabs.length; i++) {
     try {
       await db.query(tabs[i]);

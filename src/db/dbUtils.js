@@ -1,8 +1,8 @@
 const db = require("./index");
 
 const query = async (sql, params) => {
-  const [results] = await db.query(sql, params);
-  return results;
+  const result = await db.query(sql, params);
+  return result;
 };
 
 const create = async (table, data) => {
