@@ -28,7 +28,15 @@ const core = `CREATE TABLE IF NOT EXISTS core (
     update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );`;
 
-const tables = [app, core];
+const tag = `CREATE TABLE IF NOT EXISTS tag (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL UNIQUE,
+  status TINYINT(1) DEFAULT 1,
+  create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);`;
+
+const tables = [app, core, tag];
 
 module.exports = {
   tables,
