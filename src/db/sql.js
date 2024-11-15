@@ -1,4 +1,4 @@
-const { read, create, update, remove } = require("./dbUtils");
+const { read, create, update, remove } = require("./mysqlUtils");
 
 const getApps = async () => {
   return await read("app");

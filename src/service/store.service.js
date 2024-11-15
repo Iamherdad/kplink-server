@@ -1,4 +1,4 @@
-const { query } = require("../db/dbUtils");
+const { query } = require("../db/mysqlUtils");
 
 const getstores = async () => {
   const stores = await query("SELECT * FROM store");

@@ -12,12 +12,13 @@ const dbConfig = {
   connectionLimit: 10,
 };
 
-const db = new Database(dbConfig);
+const mysql = new Database(dbConfig);
+const redis = new Database({ type: "redis", host: "127.0.0.1", port: 6378 });
 
 const createTables = async (tabs) => {
   for (let i = 0; i < tabs.length; i++) {
     try {
-      await db.query(tabs[i]);
+      await mysql.query(tabs[i]);
       console.log(`Table created successfully`);
     } catch (err) {
       console.log(`Table created failed`);
@@ -27,13 +28,18 @@ const createTables = async (tabs) => {
 
 (async () => {
   try {
-    await db.connect();
-
+    await mysql.connect();
+    console.log("mysql connected");
     await createTables(tables);
+    await redis.connect();
+    console.log("redis connected");
   } catch (error) {
     console.error("Database error:", error);
   } finally {
   }
 })();
 
-module.exports = db;
+module.exports = {
+  mysql,
+  redis,
+};

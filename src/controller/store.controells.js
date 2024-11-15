@@ -1,4 +1,4 @@
-const db = require("../db/dbUtils");
+const db = require("../db/mysqlUtils");
 
 const addStore = async (ctx, next) => {
   const { name, description, app_resource, start_path, start_type, version } =

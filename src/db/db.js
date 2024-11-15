@@ -1,6 +1,6 @@
 // db.js
-const MySQLDatabase = require("./mysql");
-
+const MySQL = require("./mysql");
+const MyRedis = require("./redis");
 class Database {
   constructor(config) {
     this.config = config;
@@ -12,7 +12,10 @@ class Database {
     delete this.config.type;
     switch (this.type) {
       case "mysql":
-        this.dbInstance = new MySQLDatabase(this.config);
+        this.dbInstance = new MySQL(this.config);
+        break;
+      case "redis":
+        this.dbInstance = new MyRedis(this.config);
         break;
       case "sqlite":
         break;
