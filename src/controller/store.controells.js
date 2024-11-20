@@ -1,36 +1,48 @@
-const db = require("../db/mysqlUtils");
-
+const { insertStore, getStoreList } = require("../service/store.service");
+const { getTagInfo } = require("../service/tag.service");
 const addStore = async (ctx, next) => {
-  const { name, description, app_resource, start_path, start_type, version } =
-    ctx.reqyest.body;
+  const { tag_id, description, app_resource, start_path, start_type, version } =
+    ctx.request.body;
 
-  const SQL1 = `SELECT * FROM store WHERE name = ? ADN is_delete = 0 ADD version = ?`;
+  try {
+    const tag = await getTagInfo(tag_id);
+    if (!tag.length) {
+      ctx.app.emit("error", "PAYLOAD_ERROR", ctx);
 
-  const store = await db.query(SQL1, [name, version]);
+      return;
+    }
 
-  if (store.length > 0) {
-    ctx.body = {
-      code: 1,
-      msg: "store already exists",
-    };
-    return;
+    const result = await insertStore({
+      tag_id,
+      description,
+      app_resource,
+      start_path,
+      start_type,
+      version,
+    });
+    console.log("result", result);
+    if (result.affectedRows === 1) {
+      ctx.app.emit("success", "", ctx);
+    } else {
+      ctx.app.emit("error", "SYSTEM_ERROR", ctx);
+    }
+  } catch (err) {
+    if (err.code === "ER_DUP_ENTRY") {
+      ctx.app.emit("error", "DATA_EXIST", ctx);
+      return;
+    }
+
+    ctx.app.emit("error", "PAYLOAD_ERROR", ctx);
   }
+};
 
-  const SQL2 = `INSERT INTO store SET ?`;
-
-  const result = await db.query(SQL2, {
-    name,
-    description,
-    app_resource,
-    start_path,
-    start_type,
-    version,
-  });
-
-  ctx.body = {
-    code: 0,
-    data: result,
-  };
+const getstores = async (ctx, next) => {
+  try {
+    const result = await getStoreList();
+    ctx.app.emit("success", result, ctx);
+  } catch (err) {
+    ctx.app.emit("error", "SYSTEM_ERROR", ctx);
+  }
 };
 
 const updateStore = async (ctx, next) => {
@@ -68,4 +80,5 @@ const updateStore = async (ctx, next) => {
 
 module.exports = {
   addStore,
+  getstores,
 };

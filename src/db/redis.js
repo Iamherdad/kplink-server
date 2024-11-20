@@ -1,6 +1,6 @@
 const redis = require("ioredis");
 
-class MyRedis {
+class Redis {
   constructor(config) {
     this.config = config;
     this.redis = null;
@@ -23,4 +23,4 @@ class MyRedis {
   }
 }
 
-module.exports = MyRedis;
+module.exports = Redis;

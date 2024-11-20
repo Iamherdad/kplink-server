@@ -1,4 +1,4 @@
-const app = require("../src/app/app");
+const app = require("../app/app");
 
 app.on("error", (err, ctx) => {
   let code = -1000;
@@ -20,6 +20,15 @@ app.on("error", (err, ctx) => {
       break;
     case "FILE_TYPE_ERROR":
       message = "文件类型错误";
+      break;
+    case "PAYLOAD_ERROR":
+      message = "请求参数错误";
+      break;
+    case "DATA_EXIST":
+      message = "数据已存在";
+      break;
+    case "TAG_EXIST":
+      message = "标签已存在";
       break;
   }
   ctx.body = { code, message, data };

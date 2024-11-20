@@ -4,6 +4,7 @@ const {
   errorHandler,
   verifyAppFile,
 } = require("../middleware/fileUpload.middleware");
+const { appUploadController } = require("../controller/fileUpload.controller");
 
 const router = new Router({
   prefix: "/file",
@@ -20,10 +21,11 @@ router.post(
     multipart: true,
     formidable: {
       keepExtensions: true,
-      maxFileSize: 300 * 1024 * 1024,
+      maxFileSize: 3000 * 1024 * 1024,
     },
   }),
-  verifyAppFile
+  verifyAppFile,
+  appUploadController
 );
 
 module.exports = router.routes();

@@ -1,4 +1,4 @@
-const app = require("../src/app/app");
+const app = require("../app/app");
 
 app.on("success", (data, ctx) => {
   let code = 1000;

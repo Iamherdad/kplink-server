@@ -1,11 +1,11 @@
-const db = require("./index");
+const { mysql: db } = require("./index");
 
 const query = async (sql, params) => {
   const result = await db.query(sql, params);
   return result;
 };
 
-const create = async (table, data) => {
+const insert = async (table, data) => {
   const keys = Object.keys(data).join(", ");
   const values = Object.values(data);
   const placeholders = values.map(() => "?").join(", ");
@@ -47,7 +47,7 @@ const remove = async (table, conditions) => {
 };
 
 module.exports = {
-  create,
+  insert,
   read,
   update,
   remove,

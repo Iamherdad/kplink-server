@@ -1,9 +1,10 @@
 // index.js
-const Database = require("./db");
+
 const { tables } = require("./sql_table");
+const Mysql = require("./mysql");
+const Redis = require("./redis");
 
 const dbConfig = {
-  type: "mysql", // or 'sqlite'
   host: "115.159.83.245",
   port: 3306,
   user: "root",
@@ -12,8 +13,8 @@ const dbConfig = {
   connectionLimit: 10,
 };
 
-const mysql = new Database(dbConfig);
-const redis = new Database({ type: "redis", host: "127.0.0.1", port: 6378 });
+const mysql = new Mysql(dbConfig);
+const redis = new Redis({ host: "127.0.0.1", port: 6378 });
 
 const createTables = async (tabs) => {
   for (let i = 0; i < tabs.length; i++) {
@@ -41,5 +42,5 @@ const createTables = async (tabs) => {
 
 module.exports = {
   mysql,
-  redis,
+  redis: redis,
 };

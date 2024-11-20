@@ -1,6 +1,8 @@
 const fs = require("fs");
 const crypto = require("crypto");
 const unzipper = require("unzipper");
+const { title } = require("process");
+const path = require("path");
 
 const errorHandler = async (ctx, next) => {
   try {
@@ -9,16 +11,6 @@ const errorHandler = async (ctx, next) => {
     console.log(err);
     ctx.app.emit("error", "FILE_UPLOAD_FILL", ctx);
   }
-};
-
-const calculateFileHash = (file) => {
-  const hash = crypto.createHash("md5");
-  if (typeof file === "string") {
-    hash.update(fs.readFileSync(file));
-  } else {
-    hash.update(fs.readFileSync(file.path));
-  }
-  return hash.digest("hex");
 };
 
 const verifyAppFile = async (ctx, next) => {
@@ -30,34 +22,27 @@ const verifyAppFile = async (ctx, next) => {
   }
 
   const file = Array.isArray(files.file) ? files.file[0] : files.file;
-  const { mimetype } = file;
-  if (mimetype !== "application/zip") {
+
+  const fileType =
+    file.originalFilename.split(".")[
+      file.originalFilename.split(".").length - 1
+    ];
+  console.log("fileType", fileType);
+  if (fileType !== "zip") {
     ctx.app.emit("error", "FILE_TYPE_ERROR", ctx);
     return;
   }
+
+  ctx.state.file = file;
   //拿到文件hash
-  const hash = calculateFileHash(file.filepath);
-  console.log("hash", hash);
+  // const hash = calculateFileHash(file.filepath);
+  // console.log("hash", hash);
 
-  const directoryList = [];
-  await fs
-    .createReadStream(file.filepath)
-    .pipe(unzipper.Parse())
-    .on("entry", (entry) => {
-      const filePath = entry.path;
-      console.log("entry", entry);
+  // const directory = await unzipper.Open.file(file.filepath);
+  // const file_tree = buildDirectoryTree(directory.files);
 
-      directoryList.push(filePath);
-      entry.autodrain();
-    })
-    .promise();
-
-  // 返回目录列表
-  ctx.body = {
-    hash,
-    directories: directoryList,
-  };
-
+  // ctx.state.file_tree = file_tree;
+  // ctx.state.hash = hash;
   await next();
 };
 
