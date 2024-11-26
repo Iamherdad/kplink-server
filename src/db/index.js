@@ -22,7 +22,7 @@ const createTables = async (tabs) => {
       await mysql.query(tabs[i]);
       console.log(`Table created successfully`);
     } catch (err) {
-      console.log(`Table created failed`);
+      console.log(`Table created failed`, tabs[i], err);
     }
   }
 };

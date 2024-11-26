@@ -1,9 +1,16 @@
-const { query } = require("../db/mysqlUtils");
+const { query, read } = require("../db/mysqlUtils");
 
 const insertStore = async (data) => {
-  const { tag_id, description, app_resource, start_path, start_type, version } =
-    data;
-  const SQL = `INSERT INTO store (tag_id, description, app_resource, start_path, start_type, version) VALUES (?, ?, ?, ?, ?, ?)`;
+  const {
+    tag_id,
+    description,
+    app_resource,
+    start_path,
+    start_type,
+    version,
+    name,
+  } = data;
+  const SQL = `INSERT INTO store (tag_id, description, app_resource, start_path, start_type, version,name) VALUES (?, ?, ?, ?, ?, ?,?)`;
   try {
     const result = await query(SQL, [
       tag_id,
@@ -12,6 +19,7 @@ const insertStore = async (data) => {
       start_path,
       start_type,
       version,
+      name,
     ]);
     return result;
   } catch (err) {
@@ -33,7 +41,9 @@ const getStoreList = async () => {
             'app_resource', s.app_resource,
             'start_path', s.start_path,
             'start_type', s.start_type,
-            'version', s.version
+            'version', s.version,
+            'name', s.name
+
           )
         ), JSON_ARRAY()
       ) as apps
@@ -59,7 +69,27 @@ const getStoreList = async () => {
     throw err;
   }
 };
+
+const getStoreInfo = async (id, is_delete = 0) => {
+  try {
+    const res = await read("store", { id, is_delete }, [
+      "id",
+      "tag_id",
+      "description",
+      "app_resource",
+      "start_path",
+      "start_type",
+      "version",
+      "create_at",
+      "update_at",
+    ]);
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};
 module.exports = {
   insertStore,
   getStoreList,
+  getStoreInfo,
 };

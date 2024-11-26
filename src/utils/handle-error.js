@@ -21,6 +21,9 @@ app.on("error", (err, ctx) => {
     case "FILE_TYPE_ERROR":
       message = "文件类型错误";
       break;
+    case "FILE_EXPIRY":
+      message = "文件已过期,请重新上传";
+      break;
     case "PAYLOAD_ERROR":
       message = "请求参数错误";
       break;

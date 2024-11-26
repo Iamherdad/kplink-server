@@ -1,21 +1,18 @@
 const Router = require("@koa/router");
-const { getCore } = require("../db/sql");
+const {
+  getCore,
+  modifyCore,
+  getSoftWare,
+} = require("../controller/core.controller");
+
+const { verifyModifyCore } = require("../middleware/core.middleware");
 const router = new Router({
   prefix: "/core",
 });
 
-router.get("/", async (ctx) => {
-  try {
-    const apps = await getCore();
-    ctx.body = apps;
-  } catch (error) {
-    console.log(error);
-    ctx.body = 100;
-  }
-});
+router.get("/", getCore);
 
-router.get("/list", async (ctx) => {
-  ctx.body = "List of extensions";
-});
+router.get("/software", getSoftWare);
 
+router.post("/modify", verifyModifyCore, modifyCore);
 module.exports = router.routes();

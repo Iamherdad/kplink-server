@@ -1,23 +1,28 @@
 const Router = require("@koa/router");
-const { getApps, createApp, updateApp, removeApp } = require("../db/sql");
+
+const {
+  verifyAddApp,
+  verifyModifyApp,
+} = require("../middleware/app.middleware");
+const {
+  getApps,
+  addApp,
+  modifyApp,
+  removeApp,
+  getAppInfo,
+} = require("../controller/app.controller");
 const router = new Router({
   prefix: "/app",
 });
 
-router.get("/", async (ctx) => {
-  try {
-    console.log(111);
-    const apps = await getApps();
-    console.log(apps);
-    ctx.body = apps;
-  } catch (error) {
-    console.log(error);
-    ctx.body = 100;
-  }
-});
+router.get("/", getApps);
 
-router.get("/list", async (ctx) => {
-  ctx.body = "List of extensions";
-});
+router.get("/info", getAppInfo);
+
+router.post("/", verifyAddApp, addApp);
+
+router.post("/modify", verifyModifyApp, modifyApp);
+
+router.post("/delete", removeApp);
 
 module.exports = router.routes();

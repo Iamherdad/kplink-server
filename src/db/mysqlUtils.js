@@ -13,14 +13,36 @@ const insert = async (table, data) => {
   return await query(sql, values);
 };
 
-const read = async (table, conditions = {}) => {
+// const read = async (table, conditions = {}, field = "*") => {
+//   const keys = Object.keys(conditions);
+//   const values = Object.values(conditions);
+//   const whereClause = keys.length
+//     ? `WHERE ${keys.map((key) => `${key} = ?`).join(" AND ")}`
+//     : "";
+//   const fieldClause = field === "*" ? field : field.join(", ");
+//   const sql = `SELECT ${fieldClause} FROM ${table} ${whereClause}`;
+//   console.log("sql", sql);
+//   return await query(sql, values);
+// };
+
+const read = async (table, conditions = {}, field = "*", joins = []) => {
   const keys = Object.keys(conditions);
   const values = Object.values(conditions);
   const whereClause = keys.length
     ? `WHERE ${keys.map((key) => `${key} = ?`).join(" AND ")}`
     : "";
+  const fieldClause = field === "*" ? field : field.join(", ");
 
-  const sql = `SELECT * FROM ${table} ${whereClause}`;
+  // 构建 JOIN 子句
+  const joinClause = joins
+    .map((join) => {
+      const { type, table, on } = join;
+      return `${type.toUpperCase()} JOIN ${table} ON ${on}`;
+    })
+    .join(" ");
+
+  const sql = `SELECT ${fieldClause} FROM ${table} ${joinClause} ${whereClause}`;
+  console.log("sql", sql);
   return await query(sql, values);
 };
 

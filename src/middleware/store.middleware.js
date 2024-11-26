@@ -1,28 +1,30 @@
 const joi = require("joi");
 
 const addStoreSchema = joi.object({
-  tag_id: joi.number().required().min(1),
   description: joi.string().required().min(1).max(255),
-  app_resource: joi.string().required().min(1).max(255),
+  file_id: joi.string().required().min(1).max(255),
   start_path: joi.string().required().min(1).max(255),
-  start_type: joi.string().valid("exe", "webview").required(),
-  version: joi.number().required().min(0).max(9999999999),
+  tag_id: joi.number().required().min(1),
+  version: joi.string().required().min(5).max(5),
+  // app_resource: joi.string().required().min(1).max(255),
+
+  // start_type: joi.string().valid("exe", "webview").required(),
 });
 
 const verifyAddStore = async (ctx, next) => {
-  const { tag_id, description, app_resource, start_path, start_type, version } =
+  const { tag_id, description, file_id, start_path, version } =
     ctx.request.body;
 
   const result = addStoreSchema.validate({
     tag_id,
     description,
-    app_resource,
+    file_id,
     start_path,
-    start_type,
     version,
   });
 
   if (result.error) {
+    console.log("result.error", result.error);
     ctx.app.emit("error", "PAYLOAD_ERROR", ctx);
     return;
   }

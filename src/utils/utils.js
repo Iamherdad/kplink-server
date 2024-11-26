@@ -33,12 +33,35 @@ const buildDirectoryTree = (files, rename, originName) => {
     const result = [];
     for (const key in node) {
       const item = node[key];
-      result.push({
-        name: key,
-        type: item.type,
-        path: item.path,
-        children: convertToTree(item.children),
-      });
+      if (item.type === "Folder") {
+        result.push({
+          title: key,
+          type: item.type,
+          isLeaf: item.type !== "Folder",
+          key: item.path,
+          disabled: true,
+          children: convertToTree(item.children),
+        });
+      } else {
+        if (item.path.endsWith(".exe") || item.path.endsWith(".html")) {
+          console.log(123);
+          result.push({
+            title: key,
+            type: item.type,
+            isLeaf: item.type !== "Folder",
+            key: item.path,
+            children: convertToTree(item.children),
+          });
+        }
+      }
+      // result.push({
+      //   title: key,
+      //   type: item.type,
+      //   isLeaf: item.type !== "Folder",
+      //   key: item.path,
+      //   disabled: !item.path.endsWith(".exe") || !item.path.endsWith(".html"),
+      //   children: convertToTree(item.children),
+      // });
     }
     return result;
   };

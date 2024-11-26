@@ -1,10 +1,22 @@
 const { insertStore, getStoreList } = require("../service/store.service");
 const { getTagInfo } = require("../service/tag.service");
+const { redis } = require("../db/index.js");
 const addStore = async (ctx, next) => {
-  const { tag_id, description, app_resource, start_path, start_type, version } =
+  const { tag_id, description, start_path, version, file_id } =
     ctx.request.body;
 
   try {
+    const resource = await redis.get(file_id);
+
+    if (!resource) {
+      ctx.app.emit("error", "FILE_EXPIRY", ctx);
+      return;
+    }
+
+    const app_resource = resource;
+    const start_type =
+      app_resource.split(".").pop() === "exe" ? "exe" : "webview";
+
     const tag = await getTagInfo(tag_id);
     if (!tag.length) {
       ctx.app.emit("error", "PAYLOAD_ERROR", ctx);
@@ -19,6 +31,7 @@ const addStore = async (ctx, next) => {
       start_path,
       start_type,
       version,
+      name: tag[0].name,
     });
     console.log("result", result);
     if (result.affectedRows === 1) {
@@ -27,6 +40,7 @@ const addStore = async (ctx, next) => {
       ctx.app.emit("error", "SYSTEM_ERROR", ctx);
     }
   } catch (err) {
+    console.log("err", err);
     if (err.code === "ER_DUP_ENTRY") {
       ctx.app.emit("error", "DATA_EXIST", ctx);
       return;
