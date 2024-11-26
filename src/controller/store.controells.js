@@ -15,8 +15,8 @@ const addStore = async (ctx, next) => {
 
     const app_resource = resource;
     const start_type =
-      app_resource.split(".").pop() === "exe" ? "exe" : "webview";
-
+      start_path.split(".").pop() === "exe" ? "exe" : "webview";
+    console.log("app_resource", start_path, app_resource, start_type);
     const tag = await getTagInfo(tag_id);
     if (!tag.length) {
       ctx.app.emit("error", "PAYLOAD_ERROR", ctx);

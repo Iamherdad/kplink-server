@@ -1,6 +1,6 @@
 const app = `CREATE TABLE IF NOT EXISTS app (
     id CHAR(32) PRIMARY KEY ,
-    name VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255)  NOT NULL,
     description VARCHAR(255),
     icon VARCHAR(255) NOT NULL,
     app_resource VARCHAR(255) NOT NULL,
@@ -10,7 +10,8 @@ const app = `CREATE TABLE IF NOT EXISTS app (
     update_desc VARCHAR(255) NOT NULL,
     is_delete TINYINT(1) DEFAULT 0,
     create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE INDEX unique_name_version_is_delete (name, version, is_delete)
 );`;
 
 const app_priview = `CREATE TABLE IF NOT EXISTS app_preview(

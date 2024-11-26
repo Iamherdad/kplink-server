@@ -93,14 +93,14 @@ const insertApp = async (data) => {
     preview_images,
   } = data;
   console.log("data", preview_images);
-  const INSERT_APP_SQL = `INSERT INTO app (id, name, description, icon, resource_id, , version, update_desc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const INSERT_APP_SQL = `INSERT INTO app (id, name, description, icon, resource_id , version, update_desc) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
   // 构建批量插入的 SQL 语句和参数
   const INSERT_APP_PREVIEW_SQL = `INSERT INTO app_preview (app_id, url) VALUES ${preview_images
     .map(() => "(?, ?)")
     .join(", ")}`;
   const previewParams = preview_images.flatMap((url) => [uuid, url]);
-  const content = await mysql.dbConnect;
+  const content = await mysql.pool.getConnection();
   try {
     // 开启事务
 
@@ -152,7 +152,7 @@ const updateApp = async (data) => {
     .join(", ")}`;
 
   const previewParams = preview_images.flatMap((url) => [id, url]);
-  const content = await mysql.dbConnect;
+  const content = await mysql.pool.getConnection();
   try {
     await content.beginTransaction();
 
