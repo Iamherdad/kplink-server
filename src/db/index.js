@@ -14,7 +14,7 @@ const dbConfig = {
 };
 
 const mysql = new Mysql(dbConfig);
-const redis = new Redis({ host: "redis", port: 6378 });
+const redis = new Redis({ host: "127.0.0.1", port: 6378 });
 
 const createTables = async (tabs) => {
   for (let i = 0; i < tabs.length; i++) {

@@ -61,10 +61,29 @@ const banner = `CREATE TABLE IF NOT EXISTS banner(
 id int PRIMARY KEY AUTO_INCREMENT,
 url VARCHAR(255) NOT NULL,
 link VARCHAR(255) NOT NULL
-
-
 )`;
-const tables = [app, app_priview, core, tag, store, banner];
+
+const operate_log_app = `CREATE TABLE IF NOT EXISTS operate_log_start(
+	id INT PRIMARY KEY AUTO_increment,
+	app_id VARCHAR(255) NOT NULL,
+	num INT NOT NULL 
+)`;
+
+const operate_log_user = `CREATE TABLE IF NOT EXISTS operate_log_user(
+	id INT PRIMARY KEY AUTO_increment,
+	device_id VARCHAR(255) NOT NULL
+)`;
+
+const tables = [
+  app,
+  app_priview,
+  core,
+  tag,
+  store,
+  banner,
+  operate_log_app,
+  operate_log_user,
+];
 
 module.exports = {
   tables,

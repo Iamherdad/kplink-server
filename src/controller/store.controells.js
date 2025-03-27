@@ -2,6 +2,7 @@ const { insertStore, getStoreList } = require("../service/store.service");
 const { getTagInfo } = require("../service/tag.service");
 const { redis } = require("../db/index.js");
 const addStore = async (ctx, next) => {
+  console.log("11");
   const { tag_id, description, start_path, version, file_id } =
     ctx.request.body;
 

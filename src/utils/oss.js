@@ -14,7 +14,8 @@ const putPolicy = new qiniu.rs.PutPolicy(options);
 const uploadToken = putPolicy.uploadToken(mac);
 const config = new qiniu.conf.Config();
 config.zone = qiniu.zone.Zone_z2;
-config.url = "http://cdn.bilibili.games";
+// config.url = "http://cdn.bilibili.games";
+config.url = "http://qiniu.kpaiedu.com";
 
 const uploadFile = (key, file) => {
   const putExtra = new qiniu.form_up.PutExtra();

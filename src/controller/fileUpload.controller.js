@@ -19,7 +19,7 @@ const appUploadController = async (ctx, next) => {
     hash,
     file_tree,
   };
-
+  console.log("333");
   if (getCacheRes) {
     console.log("file download url[cache]", getCacheRes);
     ctx.app.emit(
